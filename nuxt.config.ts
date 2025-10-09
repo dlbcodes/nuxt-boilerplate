@@ -28,12 +28,31 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
-  modules: ["@vueuse/nuxt", "@pinia/nuxt", "@nuxtjs/supabase", "nuxt-gtag", "nuxt-headlessui"],
+  modules: [
+    "@vueuse/nuxt",
+    "@pinia/nuxt",
+    "@nuxtjs/supabase",
+    "nuxt-gtag",
+    "nuxt-headlessui",
+    "@nuxt/image",
+  ],
   supabase: {
     redirectOptions: {
       login: "/login",
       callback: "/confirm",
       include: ["/admin(/*)?"],
+    },
+  },
+  image: {
+    providers: {
+      myProvider: {
+        name: "cloudfront", // optional value to overrider provider name
+        provider: "~/providers/cloudfront.ts", // Path to custom provider
+        options: {
+          // ... provider options
+          baseURL: process.env.CLOUDFRONT_URL,
+        },
+      },
     },
   },
   gtag: {

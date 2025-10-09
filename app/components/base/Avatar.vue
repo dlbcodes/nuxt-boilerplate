@@ -25,7 +25,7 @@ const initialLetter = computed(() => {
 
 const imageUrl = computed(() => {
     if (props.src && props.id) {
-        return `avatar/${props.id}/${props.src}`;
+        return `${props.id}/avatar/${props.src}`;
     }
     return null; // No URL if src is not provided
 });

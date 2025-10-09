@@ -112,6 +112,42 @@ export const useProfileStore = defineStore('profile', () => {
 	}
 
 	/**
+ * Delete user's account permanently
+ */
+	async function deleteAccount(): Promise<boolean> {
+		loading.value = true
+		error.value = null
+
+		try {
+			await profileApiService.deleteAccount()
+
+			// Clear all local data
+			clearAll()
+
+			addToast('Account deleted successfully', {
+				type: 'success',
+			})
+
+			return true
+		} catch (err) {
+			const errorMessage = err instanceof ProfileApiError
+				? err.message
+				: 'Failed to delete account'
+
+			error.value = errorMessage
+
+			addToast(errorMessage, {
+				type: 'error',
+			})
+
+			return false
+		} finally {
+			loading.value = false
+		}
+	}
+
+
+	/**
 	 * Set user (from Supabase auth)
 	 */
 	function setUser(userData: User | null): void {
@@ -152,6 +188,7 @@ export const useProfileStore = defineStore('profile', () => {
 		// Actions
 		fetchProfile,
 		updateProfile,
+		deleteAccount,
 		setUser,
 		clearAll,
 		setProfile

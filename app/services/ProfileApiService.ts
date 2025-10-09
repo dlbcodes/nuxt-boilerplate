@@ -99,6 +99,19 @@ export class ProfileApiService {
 	}
 
 	/**
+ * Delete the authenticated user's account
+ */
+	async deleteAccount(): Promise<void> {
+		try {
+			await $fetch(`${this.baseUrl}/me`, {
+				method: 'DELETE'
+			})
+		} catch (error) {
+			throw this._handleError(error, 'Failed to delete account')
+		}
+	}
+
+	/**
 	 * Private error handler
 	 */
 	private _handleError(error: any, fallbackMessage: string): ProfileApiError {

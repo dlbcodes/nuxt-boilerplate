@@ -1,67 +1,69 @@
 <script setup lang="ts">
-// import { ArrowDownLeftIcon } from "@heroicons/vue/24/outline";
+import { ArrowDownLeftIcon } from "@heroicons/vue/24/outline";
 import { buttonVariants } from "~/variants/ButtonVariants";
 
-// useAppShortcut("Cmd+Shift+C", () => {
-//     isSidebarCollapsed.value = !isSidebarCollapsed.value;
-// });
+const isSidebarCollapsed = ref(false);
 
-const isSidebarCollapsed = ref(false); // Sidebar state
-
-// Dynamic grid layout
-const gridClasses = computed(() =>
-    isSidebarCollapsed.value
-        ? "[grid-template-columns:0px_minmax(0,1fr)]"
-        : "[grid-template-columns:220px_minmax(0,1fr)]"
-);
+// Shortcut to toggle sidebar
+useAppShortcut("Cmd+Shift+C", () => {
+    isSidebarCollapsed.value = !isSidebarCollapsed.value;
+});
 </script>
 
 <template>
     <div
-        class="grid h-screen overflow-hidden transition-all duration-300 ease-in-out bg-stone-50 bg-[repeating-linear-gradient(135deg,theme(colors.stone.100)_0px,theme(colors.stone.100)_1px,transparent_1px,transparent_20px)] dark:bg-dark-950 dark:bg-[repeating-linear-gradient(135deg,#202020_0px,#202020_1px,transparent_1px,transparent_20px)]"
-        :class="gridClasses"
+        class="relative flex h-screen bg-stone-100 bg-[repeating-linear-gradient(135deg,theme(colors.stone.100)_0px,theme(colors.stone.100)_1px,transparent_1px,transparent_20px)] dark:bg-dark-950 dark:bg-[repeating-linear-gradient(135deg,#202020_0px,#202020_1px,transparent_1px,transparent_20px)]"
     >
+        <!-- Sidebar -->
         <div
-            class="relative h-full bg-stone-100 border-r border-stone-200 dark:bg-dark-900 dark:border-black dark:shadow-[inset_-1px_1px_2px_0px_rgba(71,71,71,0.56)] overflow-visible"
+            class="flex flex-col border-r border-stone-200 bg-stone-100 dark:bg-dark-900 dark:border-black dark:shadow-[inset_-1px_1px_2px_0px_rgba(71,71,71,0.56)] transition-all duration-300 ease-in-out"
+            :class="isSidebarCollapsed ? 'w-0 overflow-hidden' : 'w-[220px]'"
         >
-            <!-- Header -->
-            <div class="relative h-14">
+            <!-- Sidebar Header -->
+            <div class="h-12 shrink-0">
                 <div
                     class="flex items-center justify-between h-full min-w-0 px-4"
                 >
                     <Logo to="/admin" />
                 </div>
-
-                <button
-                    @click="isSidebarCollapsed = !isSidebarCollapsed"
-                    :class="
-                        cn(
-                            buttonVariants({ variant: 'icon', size: 'icon' }),
-                            'absolute top-4 -right-8 z-30 p-1 transition-transform duration-300 ease-in-out'
-                        )
-                    "
-                >
-                    Close
-                    <!-- <ArrowDownLeftIcon
-                        class="size-4 text-stone-950 dark:text-dark-300"
-                        :class="{ 'rotate-180': isSidebarCollapsed }"
-                    /> -->
-                </button>
             </div>
 
-            <!-- Sidebar Content - with custom scrollable area -->
-            <div class="h-[calc(100vh-3.5rem)] relative">
-                <!-- Scrollable wrapper -->
-                <div
-                    class="absolute inset-0 overflow-y-auto overflow-x-visible min-w-0"
-                >
-                    <slot name="leftPane"></slot>
-                </div>
+            <!-- Sidebar Content -->
+            <div class="flex-1 overflow-y-auto">
+                <slot name="leftPane"></slot>
             </div>
         </div>
 
-        <div class="z-20">
-            <slot></slot>
+        <!-- Toggle Button - Outside sidebar so it stays visible -->
+        <button
+            @click="isSidebarCollapsed = !isSidebarCollapsed"
+            :class="
+                cn(
+                    buttonVariants({ variant: 'icon', size: 'icon' }),
+                    'flex justify-center items-center absolute top-2 z-30 p-1 transition-all duration-300 ease-in-out'
+                )
+            "
+            :style="{ left: isSidebarCollapsed ? '10px' : '230px' }"
+        >
+            <ArrowDownLeftIcon
+                class="size-4 text-stone-950 dark:text-dark-300"
+                :class="{ 'rotate-180': isSidebarCollapsed }"
+            />
+        </button>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col min-w-0">
+            <!-- Header -->
+            <div class="flex-shrink-0">
+                <HeaderNavigation />
+            </div>
+
+            <!-- Scrollable Content -->
+            <div
+                class="flex-1 overflow-y-auto border-t border-stone-200 bg-stone-50 bg-[repeating-linear-gradient(135deg,theme(colors.stone.100)_0px,theme(colors.stone.100)_1px,transparent_1px,transparent_20px)] dark:bg-dark-950 dark:bg-[repeating-linear-gradient(135deg,#202020_0px,#202020_1px,transparent_1px,transparent_20px)]"
+            >
+                <slot></slot>
+            </div>
         </div>
     </div>
 </template>

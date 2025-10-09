@@ -7,13 +7,8 @@ const { register, error, loading, signOut } = useAuth();
 <template>
     <NuxtLayout>
         <template #leftPane>
-            <ul>
-                <li>Orders</li>
-                <li>Users</li>
-                <li>Schedulers</li>
-            </ul>
-            <Button @click="signOut">Signout</Button>
-            <AvatarDropdown />
+            <AccountNavigation />
+            <!-- <Button @click="signOut">Signout</Button> -->
         </template>
 
         <div class="h-full">
