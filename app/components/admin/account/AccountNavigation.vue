@@ -18,11 +18,6 @@ const navigationItems = [
         icon: LockClosedIcon,
     },
     {
-        href: "/admin/account/notifications",
-        label: "Notifications",
-        icon: BellIcon,
-    },
-    {
         href: "/admin/account/delete",
         label: "Delete account",
         icon: TrashIcon,

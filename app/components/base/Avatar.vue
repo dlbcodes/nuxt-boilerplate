@@ -15,10 +15,6 @@ const props = withDefaults(
     }
 );
 
-const runtimeConfig = useRuntimeConfig();
-const bucketName = runtimeConfig.public.AWS_BUCKET_NAME;
-const region = runtimeConfig.public.AWS_BUCKET_REGION;
-
 const initialLetter = computed(() => {
     return props.name !== null ? props.name.slice(0, 1) : "X";
 });
@@ -27,19 +23,22 @@ const imageUrl = computed(() => {
     if (props.src && props.id) {
         return `${props.id}/avatar/${props.src}`;
     }
-    return null; // No URL if src is not provided
+    return null;
 });
+
+// Add a key to force re-render when src changes
+const imageKey = computed(() => props.src || "default");
 </script>
 
 <template>
     <div :class="cn(avatarVariants({ size }), props.class)">
-        <!-- <img v-if="props.src" class="" :src="props.src" alt="Avatar" /> -->
         <NuxtImg
-            v-if="props.src"
+            v-if="imageUrl"
+            :key="imageKey"
             provider="cloudfront"
             :src="imageUrl"
             alt="Avatar"
-            class="object-cover w-full h-full"
+            class="object-cover w-full h-full rounded-full"
         />
         <div
             v-else

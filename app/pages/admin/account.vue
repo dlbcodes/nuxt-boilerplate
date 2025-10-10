@@ -8,7 +8,6 @@ const { register, error, loading, signOut } = useAuth();
     <NuxtLayout>
         <template #leftPane>
             <AccountNavigation />
-            <!-- <Button @click="signOut">Signout</Button> -->
         </template>
 
         <div class="h-full">

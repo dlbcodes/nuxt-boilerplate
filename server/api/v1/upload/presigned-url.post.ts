@@ -1,5 +1,6 @@
 import { PutObjectCommand } from "@aws-sdk/client-s3"
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner"
+import { prisma } from "~~/server/utils/prisma";
 
 export default defineEventHandler(async (event) => {
 	const user = await requireAuthUser(event)
@@ -29,18 +30,39 @@ export default defineEventHandler(async (event) => {
 		})
 	}
 
-	// Generate unique filename
-	const timestamp = Date.now()
-	const randomId = Math.random().toString(36).substring(2, 15)
-	const fileExtension = contentType.split('/')[1] || 'jpg'
-	const fileName = `${type}-${user.id}-${timestamp}-${randomId}.${fileExtension}`
-	const fileKey = `${user.id}/avatar/${fileName}`
-
 	try {
-		// Use shared S3 client
 		const s3 = getS3Client()
 
-		// Create S3 command for upload
+		// Step 1: Get current avatar/cover from database to delete old file
+		const profile = await prisma.profile.findUnique({
+			where: { id: user.id },
+			select: {
+				avatar: true,
+			}
+		})
+
+		if (!profile) {
+			console.error('Failed to fetch profile')
+		}
+
+		// Step 2: Delete old file if it exists
+		if (profile) {
+			const oldFileName = type === 'avatar' ? profile.avatar : ""
+
+			if (oldFileName) {
+				const oldFileKey = `${user.id}/${type}/${oldFileName}`
+				await deleteS3File(oldFileKey)
+			}
+		}
+
+		// Step 3: Generate unique filename for new upload
+		const timestamp = Date.now()
+		const randomId = Math.random().toString(36).substring(2, 15)
+		const fileExtension = contentType.split('/')[1] || 'jpg'
+		const fileName = `${timestamp}-${randomId}.${fileExtension}`
+		const fileKey = `${user.id}/${type}/${fileName}`
+
+		// Step 4: Create S3 command for upload
 		const command = new PutObjectCommand({
 			Bucket: process.env.AWS_BUCKET_NAME,
 			Key: fileKey,
@@ -53,7 +75,7 @@ export default defineEventHandler(async (event) => {
 			}
 		})
 
-		// Generate presigned URL (expires in 5 minutes)
+		// Step 5: Generate presigned URL (expires in 5 minutes)
 		const presignedUrl = await getSignedUrl(s3, command, {
 			expiresIn: 300
 		})

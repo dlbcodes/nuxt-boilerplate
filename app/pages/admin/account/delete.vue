@@ -59,10 +59,10 @@ const deleteAccount = async () => {
             </div>
             <template #footer>
                 <div class="mb-6 p-4">
-                    <h4 class="text-sm font-semibold text-gray-900 mb-3">
+                    <h4 class="text-sm font-semibold text-stone-900 mb-3">
                         What will be deleted:
                     </h4>
-                    <ul class="space-y-2 text-sm text-gray-600">
+                    <ul class="space-y-2 text-sm text-stone-600">
                         <li class="flex items-start gap-x-2">
                             <span class="text-red-500 mt-0.5">•</span>
                             <span>Your profile and account information</span>

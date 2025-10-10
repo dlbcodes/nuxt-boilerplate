@@ -1,6 +1,7 @@
 import {
 	S3Client,
 	ListObjectsV2Command,
+	DeleteObjectCommand,
 	DeleteObjectsCommand,
 	type DeleteObjectsCommandInput
 } from "@aws-sdk/client-s3"
@@ -16,6 +17,28 @@ export const getS3Client = () => {
 			secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
 		},
 	})
+}
+
+/**
+ * Delete a single file from S3
+ */
+export async function deleteS3File(fileKey: string): Promise<boolean> {
+	const s3 = getS3Client()
+	const bucketName = process.env.AWS_BUCKET_NAME
+
+	try {
+		const command = new DeleteObjectCommand({
+			Bucket: bucketName,
+			Key: fileKey
+		})
+
+		await s3.send(command)
+		console.log(`Successfully deleted file: ${fileKey}`)
+		return true
+	} catch (error) {
+		console.error(`Failed to delete file ${fileKey}:`, error)
+		return false
+	}
 }
 
 /**

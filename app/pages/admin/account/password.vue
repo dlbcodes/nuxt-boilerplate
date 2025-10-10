@@ -26,7 +26,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
-    <div class="max-w-2xl pl-20 pt-20">
+    <div class="flex flex-col gap-y-6 max-w-2xl pl-20 pt-20">
         <Header
             title="Manage your password"
             subtitle="Update your password for enhanced security"
