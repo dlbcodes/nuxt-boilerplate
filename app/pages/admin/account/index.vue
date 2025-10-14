@@ -7,7 +7,6 @@ const { update: updateEmail } = useAuth();
 
 // Reactive form state
 const form = ref({ email: "", name: "" });
-
 const originalData = ref({ email: "", name: "" });
 
 // Validation schema
@@ -23,32 +22,20 @@ const validationSchema = z.object({
 // Validation hooks
 const { errors, validate, resetErrors } = useValidation(validationSchema);
 
-// Watch user data from the store to initialize the form
-watch(
-    () => profileStore.user, // Watch for changes in profileStore.user (email)
-    (user) => {
-        if (user) {
-            form.value.email = user.email || "";
-            originalData.value.email = form.value.email; // Set the original email for comparison
-        }
-    },
-    { immediate: true }
-);
-
-watch(
-    () => profileStore.profile, // Watch for changes in profileStore.profile (name)
-    (profile) => {
-        if (profile) {
-            form.value.name = profile.name || "";
-            originalData.value.name = form.value.name; // Set the original name for comparison
-        }
-    },
-    { immediate: true }
-);
+// Initialize on client only
+onMounted(() => {
+    form.value.email = profileStore.user?.email || "";
+    form.value.name = profileStore.profile?.name || "";
+    originalData.value.email = form.value.email;
+    originalData.value.name = form.value.name;
+});
 
 // Computed property to check if there are changes
 const isSaveDisabled = computed(() => {
-    return JSON.stringify(form.value) === JSON.stringify(originalData.value);
+    return (
+        form.value.email === originalData.value.email &&
+        form.value.name === originalData.value.name
+    );
 });
 
 // Loading state
@@ -56,16 +43,15 @@ const isLoading = ref(false);
 
 // Optimized save function with error handling
 const handleSubmit = useDebounceFn(async () => {
-    resetErrors(); // Reset any previous errors
-    const isValid = validate(form.value); // Validate the form input
+    resetErrors();
+    const isValid = validate(form.value);
 
-    if (!isValid) return; // Stop if validation fails
+    if (!isValid) return;
 
-    isLoading.value = true; // Start loading state
+    isLoading.value = true;
 
-    const updates = []; // To keep track of promises
+    const updates = [];
 
-    // Check if the email is updated (auth-level change)
     if (form.value.email !== originalData.value.email) {
         updates.push(
             updateEmail({ email: form.value.email }).catch((error) => {
@@ -75,7 +61,6 @@ const handleSubmit = useDebounceFn(async () => {
         );
     }
 
-    // Check if the name is updated (profile-level change)
     if (form.value.name !== originalData.value.name) {
         updates.push(
             profileStore
@@ -87,10 +72,8 @@ const handleSubmit = useDebounceFn(async () => {
         );
     }
 
-    // Wait for all updates to complete
     await Promise.all(updates);
 
-    // Update original data to reflect successful changes
     if (updates.length > 0 && !errors.value.email && !errors.value.name) {
         originalData.value.email = form.value.email;
         originalData.value.name = form.value.name;
@@ -101,49 +84,51 @@ const handleSubmit = useDebounceFn(async () => {
 </script>
 
 <template>
-    <div class="flex flex-col gap-y-6 max-w-2xl pl-20 pt-20">
-        <Header
-            title="Personal details"
-            subtitle="Update your username and manage your account"
-        />
+    <ClientOnly>
+        <div class="flex flex-col gap-y-6 max-w-2xl pl-20 pt-20">
+            <Header
+                title="Personal details"
+                subtitle="Update your username and manage your account"
+            />
 
-        <AvatarUpload
-            :currentAvatar="profileStore.profile?.avatar"
-            :name="profileStore.profile?.name"
-            :userId="profileStore.profile?.id"
-        />
+            <AvatarUpload
+                :currentAvatar="profileStore.profile?.avatar"
+                :name="profileStore.profile?.name"
+                :userId="profileStore.profile?.id"
+            />
 
-        <div class="flex flex-col gap-y-4">
-            <!-- Name -->
-            <Field
-                id="name"
-                class="flex-1"
-                label="Name"
-                placeholder="Name"
-                :error="errors?.name"
-            >
-                <Input type="text" v-model="form.name" />
-            </Field>
+            <div class="flex flex-col gap-y-4">
+                <!-- Name -->
+                <Field
+                    id="name"
+                    class="flex-1"
+                    label="Name"
+                    placeholder="Name"
+                    :error="errors?.name"
+                >
+                    <Input type="text" v-model="form.name" />
+                </Field>
 
-            <!-- Email -->
-            <Field
-                id="email"
-                class="flex-1"
-                label="Email"
-                placeholder="Email"
-                :error="errors?.email"
-            >
-                <Input type="text" v-model="form.email" />
-            </Field>
+                <!-- Email -->
+                <Field
+                    id="email"
+                    class="flex-1"
+                    label="Email"
+                    placeholder="Email"
+                    :error="errors?.email"
+                >
+                    <Input type="text" v-model="form.email" />
+                </Field>
 
-            <Button
-                :loading="isLoading"
-                :disabled="isSaveDisabled"
-                @click="handleSubmit"
-                class="w-fit place-self-end"
-            >
-                Save changes
-            </Button>
+                <Button
+                    :loading="isLoading"
+                    :disabled="isSaveDisabled"
+                    @click="handleSubmit"
+                    class="w-fit place-self-end"
+                >
+                    Save changes
+                </Button>
+            </div>
         </div>
-    </div>
+    </ClientOnly>
 </template>

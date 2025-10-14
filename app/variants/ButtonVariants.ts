@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
 // Define base styles
-const baseStyles = "group flex items-center cursor-pointer transition-all";
+const baseStyles = "group flex items-center cursor-pointer transition-all  disabled:text-white/40 disabled:cursor-not-allowed disabled:stroke-white/40";
 
 // Use class variance authority with the Vue approach
 export const buttonVariants = cva(baseStyles, {

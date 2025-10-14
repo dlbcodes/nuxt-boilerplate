@@ -20,8 +20,7 @@ const { signOut, error, loading } = useAuth();
 const profileStore = useProfileStore();
 const { profile, user, isAuthenticated } = storeToRefs(profileStore);
 
-const isAskModalOpen = ref(false);
-const isFeedbackModalOpen = ref(false);
+const showFeedbackModal = ref(false);
 
 // Initialize router for navigation
 const router = useRouter();
@@ -31,22 +30,17 @@ const goToSettings = () => {
     router.push("/admin/account");
 };
 
-const openAskQuestionModal = () => {
-    isAskModalOpen.value = true;
-    // Replace with your modal-opening logic
-    console.log("Open Ask a Question modal");
-};
-
 const openSendFeedbackModal = () => {
     // Replace with your modal-opening logic
     console.log("Open Send Feedback modal");
-    isFeedbackModalOpen.value = !isFeedbackModalOpen.value;
+    showFeedbackModal.value = !showFeedbackModal.value;
 };
 
-const handleSendQuestion = (event: any) => {
-    console.log(event);
+const handleFeedbackSubmitted = (data: any) => {
+    console.log("Suggestion submitted:", data);
+    // Show success toast
+    alert("Thank you for your suggestion!");
 };
-
 // Define the options array with labels, actions, and icons
 const options = [
     {
@@ -162,9 +156,7 @@ const options = [
     </div>
 
     <FeedbackModal
-        v-if="isFeedbackModalOpen"
-        :message="`The product is still in private beta. Be the first to join.`"
-        :onConfirm="openSendFeedbackModal"
-        :onCancel="openSendFeedbackModal"
+        v-model="showFeedbackModal"
+        @submitted="handleFeedbackSubmitted"
     />
 </template>

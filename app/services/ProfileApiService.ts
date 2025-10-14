@@ -1,34 +1,39 @@
-/**
- * Data Transfer Objects (DTOs) for type safety
- */
-export interface Profile {
-	id: string
-	userId: string
-	email?: string
-	name?: string
-	avatar?: string
-	bio?: string
-	createdAt: string
-	updatedAt: string
-	[key: string]: any // For additional profile fields
-}
+// import type { Profile, UpdateProfileDto, ApiResponse } from "~~/types/profile";
+// import { updateProfileSchema } from "~~/types/profile";
 
-export interface UpdateProfileDto {
-	name?: string
-	avatar?: string
-	bio?: string
-	[key: string]: any // For additional updatable fields
-}
+import type { Profile, UpdateProfileDto, ApiResponse } from "~/types/profile"
 
-/**
- * API Response interfaces
- */
-interface ApiResponse<T> {
-	data?: T
-	profile?: Profile
-	message?: string
-	error?: string
-}
+// /**
+//  * Data Transfer Objects (DTOs) for type safety
+//  */
+// export interface Profile {
+// 	id: string
+// 	userId: string
+// 	email?: string
+// 	name?: string
+// 	avatar?: string
+// 	bio?: string
+// 	createdAt: string
+// 	updatedAt: string
+// 	[key: string]: any // For additional profile fields
+// }
+
+// export interface UpdateProfileDto {
+// 	name?: string
+// 	avatar?: string
+// 	bio?: string
+// 	[key: string]: any // For additional updatable fields
+// }
+
+// /**
+//  * API Response interfaces
+//  */
+// interface ApiResponse<T> {
+// 	data?: T
+// 	profile?: Profile
+// 	message?: string
+// 	error?: string
+// }
 
 /**
  * Custom error class for API errors
