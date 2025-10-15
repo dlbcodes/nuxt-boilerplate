@@ -98,7 +98,7 @@ onUnmounted(() => {
                     <div
                         v-if="modelValue"
                         :class="[
-                            'bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full',
+                            'bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full backdrop-blur-xl',
                             sizeClasses[size],
                         ]"
                         role="dialog"
@@ -108,7 +108,7 @@ onUnmounted(() => {
                         <!-- Header -->
                         <div
                             v-if="title || showClose || $slots.header"
-                            class="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700"
+                            class="flex items-center justify-between px-6 py-4"
                         >
                             <slot name="header">
                                 <h2
@@ -141,7 +141,7 @@ onUnmounted(() => {
                         <!-- Footer -->
                         <div
                             v-if="$slots.footer"
-                            class="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-200 dark:border-gray-700"
+                            class="flex items-center justify-end gap-3 px-6 py-4"
                         >
                             <slot name="footer" :close="close" />
                         </div>

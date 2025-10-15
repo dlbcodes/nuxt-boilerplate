@@ -2,9 +2,9 @@
 import { ref } from "vue";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { Float } from "@headlessui-float/vue";
-import { ChevronDownIcon } from "@heroicons/vue/24/solid";
 import { useRouter } from "vue-router";
 import { navigationVariants } from "~/variants/NavigationVariants";
+import { emailApiService } from "~/services/EmailApiService";
 // import { dropdownVariants } from "~/variants/DropdownVariant";
 
 // Import any icons you need
@@ -36,11 +36,10 @@ const openSendFeedbackModal = () => {
     showFeedbackModal.value = !showFeedbackModal.value;
 };
 
-const handleFeedbackSubmitted = (data: any) => {
-    console.log("Suggestion submitted:", data);
-    // Show success toast
-    alert("Thank you for your suggestion!");
+const handleFeedbackSubmitted = async (data: any) => {
+    console.log("submitted", data);
 };
+
 // Define the options array with labels, actions, and icons
 const options = [
     {
@@ -155,8 +154,10 @@ const options = [
         </Menu>
     </div>
 
-    <FeedbackModal
-        v-model="showFeedbackModal"
-        @submitted="handleFeedbackSubmitted"
-    />
+    <ClientOnly>
+        <FeedbackModal
+            v-model="showFeedbackModal"
+            @submitted="handleFeedbackSubmitted"
+        />
+    </ClientOnly>
 </template>

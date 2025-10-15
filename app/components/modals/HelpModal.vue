@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { emailApiService } from "~/services/EmailApiService";
+
 interface Props {
     modelValue: boolean;
 }
@@ -9,21 +11,24 @@ const emit = defineEmits<{
     submitted: [data: any];
 }>();
 
-const form = ref({ message: "", rating: 5 });
+const form = ref({ question: "", message: "" });
 const isLoading = ref(false);
 
 const submit = async () => {
     isLoading.value = true;
+
     try {
-        const result = await $fetch("/api/feedback", {
-            method: "POST",
-            body: form.value,
-        });
+        const result = await emailApiService.sendHtml(
+            "daniellobosilva@gmail.com",
+            "Welcome to Our App!",
+            "<h1>Welcome!</h1><p>Thanks for joining us.</p>"
+        );
+
+        console.log("Email sent:", result.id);
         emit("submitted", result);
         emit("update:modelValue", false);
-        form.value = { message: "", rating: 5 }; // Reset
     } catch (error) {
-        console.error(error);
+        console.error("Failed to send email:", error);
     } finally {
         isLoading.value = false;
     }
@@ -36,30 +41,40 @@ const submit = async () => {
         @update:model-value="emit('update:modelValue', $event)"
         title="Help modal"
     >
+        <div class="flex flex-col gap-y-2 text-center">
+            <h3
+                class="max-w-sm w-full overflow-hidden whitespace-nowrap truncate text-2xl tracking-tight text-balance font-semibold max-sm:px-4 sm:text-2xl lg:text-2xl xl:text-2xl text-stone-950 dark:text-dark-200"
+            >
+                Need a hand?
+            </h3>
+            <p class="text-sm text-stone-500">
+                Ask us anything — we’ll do our best to point you in the right
+                direction.
+            </p>
+        </div>
         <div class="space-y-4">
-            <Field id="rating" label="Rating">
-                <select v-model="form.rating" class="w-full">
-                    <option :value="5">⭐⭐⭐⭐⭐ Excellent</option>
-                    <option :value="4">⭐⭐⭐⭐ Good</option>
-                    <option :value="3">⭐⭐⭐ Average</option>
-                    <option :value="2">⭐⭐ Poor</option>
-                    <option :value="1">⭐ Terrible</option>
-                </select>
+            <Field id="question" label="Question">
+                <Input
+                    type="text"
+                    v-model="form.question"
+                    placeholder="What’s your question?"
+                />
             </Field>
 
             <Field id="message" label="Message">
-                <textarea
+                <Textarea
                     v-model="form.message"
-                    rows="4"
-                    placeholder="Tell us what you think..."
-                    class="w-full"
+                    placeholder="Tell us a bit more about what you need help with..."
+                    class="h-32 px-1"
                 />
             </Field>
         </div>
 
         <template #footer="{ close }">
             <Button variant="ghost" @click="close">Cancel</Button>
-            <Button :loading="isLoading" @click="submit">Send Feedback</Button>
+            <Button :loading="isLoading" @click="submit" class="w-fit">
+                Ask for help
+            </Button>
         </template>
     </Modal>
 </template>

@@ -5,7 +5,7 @@ export type Profile = PrismaProfile;
 
 export const updateProfileSchema = z.object({
 	name: z.string().min(1).max(100).optional(),
-	avatar: z.string().url().nullable().optional(),
+	avatar: z.string().min(1).nullable().optional(),
 	notifications: z.record(z.string(), z.any()).nullable().optional(),
 });
 

@@ -1,7 +1,9 @@
 <template>
     <div>
         <NuxtPage />
-        <ToastProvider />
-        <CookieConsent />
+        <ClientOnly>
+            <ToastProvider />
+            <CookieConsent />
+        </ClientOnly>
     </div>
 </template>

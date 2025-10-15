@@ -65,7 +65,7 @@ const handleSubmit = useDebounceFn(async () => {
         updates.push(
             profileStore
                 .updateProfile({ name: form.value.name })
-                .catch((error) => {
+                .catch((error: any) => {
                     console.error("Name update failed:", error);
                     errors.value.name = "Failed to update name.";
                 })

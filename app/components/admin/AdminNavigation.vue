@@ -4,6 +4,7 @@ import {
     LockClosedIcon,
     BellIcon,
     TrashIcon,
+    LifebuoyIcon,
 } from "@heroicons/vue/24/outline";
 
 const showHelpkModal = ref(false);
@@ -36,8 +37,9 @@ const handleHelpSubmitted = (data: any) => {
 <template>
     <Aside label="Account settings" :items="navigationItems">
         <template #bottom>
-            <button @click="showHelpkModal = true">Feedback</button>
-            <!-- <AvatarDropdown /> -->
+            <Button @click="showHelpkModal = true" variant="icon" size="icon">
+                <LifebuoyIcon class="w-5" />
+            </Button>
         </template>
     </Aside>
 
