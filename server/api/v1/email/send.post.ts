@@ -23,7 +23,13 @@ export default defineEventHandler(async (event) => {
 		});
 	}
 
-	const { to, subject, html, text, replyTo, template, variables } = validation.data;
+	const { to, subject, html, text, replyTo, template } = validation.data;
+
+	// Merge user into variables
+	const variables = {
+		...(validation.data.variables || {}),
+		user, // pass authenticated user info to the email template
+	};
 
 	// Ensure at least html or text is provided
 	if (!html && !text && !template) {
@@ -40,7 +46,7 @@ export default defineEventHandler(async (event) => {
 	}
 
 	// Pass variables to the function dynamically
-	const emailTemplate = templateFn(...Object.values(variables || {}))
+	const emailTemplate = templateFn({ ...(variables || {}), user })
 
 	console.log(emailTemplate)
 

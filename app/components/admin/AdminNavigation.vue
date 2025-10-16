@@ -27,11 +27,7 @@ const navigationItems = [
     },
 ];
 
-const handleHelpSubmitted = (data: any) => {
-    console.log("Suggestion submitted:", data);
-    // Show success toast
-    alert("Thank you for your suggestion!");
-};
+const handleHelpSubmitted = (data: any) => {};
 </script>
 
 <template>

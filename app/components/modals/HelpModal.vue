@@ -11,6 +11,7 @@ const emit = defineEmits<{
     submitted: [data: any];
 }>();
 
+const { addToast } = useToast();
 const form = ref({ question: "", message: "" });
 const isLoading = ref(false);
 
@@ -20,14 +21,20 @@ const submit = async () => {
     try {
         const result = await emailApiService.sendHtml(
             "daniellobosilva@gmail.com",
-            "Welcome to Our App!",
-            "<h1>Welcome!</h1><p>Thanks for joining us.</p>"
+            "[HELP] New message",
+            "help",
+            form.value
         );
 
-        console.log("Email sent:", result.id);
+        addToast("Help request submitted successfully!", {
+            type: "success",
+        });
         emit("submitted", result);
         emit("update:modelValue", false);
     } catch (error) {
+        addToast("Failed to submit help request. Please try again.", {
+            type: "error",
+        });
         console.error("Failed to send email:", error);
     } finally {
         isLoading.value = false;

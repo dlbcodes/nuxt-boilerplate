@@ -11,7 +11,9 @@ const emit = defineEmits<{
     submitted: [data: any];
 }>();
 
-const form = ref({ message: "", rating: 5 });
+const { addToast } = useToast();
+
+const message = ref("");
 const isLoading = ref(false);
 
 const submit = async () => {
@@ -20,15 +22,18 @@ const submit = async () => {
     try {
         const result = await emailApiService.sendHtml(
             "daniellobosilva@gmail.com",
-            "Welcome to Graphiqo!",
-            "help",
-            { name: form.value.message }
+            "[FEEDBACK] New message",
+            "feedback",
+            { message: message.value }
         );
 
+        addToast("Feedback sent successfully!", { type: "success" });
         emit("submitted", result);
         emit("update:modelValue", false);
     } catch (error) {
-        console.error("Failed to send email:", error);
+        addToast("Failed to send feedback. Please try again.", {
+            type: "error",
+        });
     } finally {
         isLoading.value = false;
     }
@@ -54,7 +59,7 @@ const submit = async () => {
         <div class="space-y-4">
             <Field id="message" label="Message">
                 <Textarea
-                    v-model="form.message"
+                    v-model="message"
                     placeholder="Type your message..."
                     class="h-32 px-1"
                 />
