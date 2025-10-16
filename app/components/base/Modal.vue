@@ -24,11 +24,11 @@ const emit = defineEmits<{
 
 // Size variants
 const sizeClasses = {
-    sm: "max-w-sm",
-    md: "max-w-md",
-    lg: "max-w-lg",
-    xl: "max-w-xl",
-    full: "max-w-full mx-4",
+    sm: "md:max-w-sm",
+    md: "md:max-w-md",
+    lg: "md:max-w-lg",
+    xl: "md:max-w-xl",
+    full: "md:max-w-full mx-4",
 };
 
 const close = () => {
@@ -84,7 +84,7 @@ onUnmounted(() => {
         >
             <div
                 v-if="modelValue"
-                class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+                class="fixed inset-0 z-50 flex items-end md:items-center justify-center bg-black/50"
                 @click.self="handleBackdropClick"
             >
                 <Transition
@@ -105,26 +105,30 @@ onUnmounted(() => {
                         aria-modal="true"
                         :aria-labelledby="title ? 'modal-title' : undefined"
                     >
-                        <!-- Header -->
+                        <!-- Header with close button always on right -->
                         <div
                             v-if="title || showClose || $slots.header"
-                            class="flex items-center justify-between px-6 py-4"
+                            class="flex items-start justify-between px-6 py-4"
                         >
-                            <slot name="header">
-                                <h2
-                                    v-if="title"
-                                    id="modal-title"
-                                    class="text-lg font-semibold text-gray-900 dark:text-white"
-                                >
-                                    {{ title }}
-                                </h2>
-                            </slot>
+                            <!-- Title/Header content (flexible) -->
+                            <div class="flex-1 pr-4">
+                                <slot name="header">
+                                    <h2
+                                        v-if="title"
+                                        id="modal-title"
+                                        class="text-lg font-semibold text-gray-900 dark:text-white"
+                                    >
+                                        {{ title }}
+                                    </h2>
+                                </slot>
+                            </div>
 
+                            <!-- Close button always on right -->
                             <button
                                 v-if="showClose"
                                 type="button"
                                 @click="close"
-                                class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                class="flex-shrink-0 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                                 aria-label="Close modal"
                             >
                                 <XMarkIcon
@@ -135,7 +139,7 @@ onUnmounted(() => {
 
                         <!-- Body -->
                         <div class="px-6 py-4">
-                            <slot />
+                            <slot :close="close" />
                         </div>
 
                         <!-- Footer -->

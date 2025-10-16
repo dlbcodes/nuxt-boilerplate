@@ -46,35 +46,39 @@ const submit = async () => {
     <Modal
         :model-value="modelValue"
         @update:model-value="emit('update:modelValue', $event)"
-        title="Help modal"
     >
-        <div class="flex flex-col gap-y-2 text-center">
-            <h3
-                class="max-w-sm w-full overflow-hidden whitespace-nowrap truncate text-2xl tracking-tight text-balance font-semibold max-sm:px-4 sm:text-2xl lg:text-2xl xl:text-2xl text-stone-950 dark:text-dark-200"
+        <div class="flex flex-col gap-y-6 pt-4">
+            <div
+                class="flex flex-col justify-center items-center gap-y-2 overflow-hidden text-center"
             >
-                Need a hand?
-            </h3>
-            <p class="text-sm text-stone-500">
-                Ask us anything — we’ll do our best to point you in the right
-                direction.
-            </p>
-        </div>
-        <div class="space-y-4">
-            <Field id="question" label="Question">
-                <Input
-                    type="text"
-                    v-model="form.question"
+                <Logo />
+                <h3
+                    class="w-full overflow-hidden whitespace-nowrap truncate text-2xl tracking-tight text-balance font-semibold max-sm:px-4 sm:text-2xl lg:text-2xl xl:text-2xl text-stone-950 dark:text-dark-200"
+                >
+                    Need a hand?
+                </h3>
+                <p class="text-sm text-stone-500">
+                    Ask us anything — we’ll do our best to point you in the
+                    right direction.
+                </p>
+            </div>
+            <div class="space-y-4">
+                <Field
+                    id="question"
+                    label="Question"
                     placeholder="What’s your question?"
-                />
-            </Field>
+                >
+                    <Input type="text" v-model="form.question" />
+                </Field>
 
-            <Field id="message" label="Message">
-                <Textarea
-                    v-model="form.message"
+                <Field
+                    id="message"
+                    label="Message"
                     placeholder="Tell us a bit more about what you need help with..."
-                    class="h-32 px-1"
-                />
-            </Field>
+                >
+                    <Textarea v-model="form.message" class="h-32 px-1" />
+                </Field>
+            </div>
         </div>
 
         <template #footer="{ close }">
