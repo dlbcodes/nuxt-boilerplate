@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { XMarkIcon } from "@heroicons/vue/24/outline";
+import { buttonVariants } from "~/variants/ButtonVariants";
 
 interface Props {
     modelValue: boolean;
@@ -98,7 +99,7 @@ onUnmounted(() => {
                     <div
                         v-if="modelValue"
                         :class="[
-                            'bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full backdrop-blur-xl',
+                            'bg-white dark:bg-gray-800 rounded-t-2xl md:rounded-2xl shadow-xl w-full backdrop-blur-xl',
                             sizeClasses[size],
                         ]"
                         role="dialog"
@@ -128,7 +129,14 @@ onUnmounted(() => {
                                 v-if="showClose"
                                 type="button"
                                 @click="close"
-                                class="flex-shrink-0 p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                :class="
+                                    cn(
+                                        buttonVariants({
+                                            variant: 'icon',
+                                            size: 'icon',
+                                        })
+                                    )
+                                "
                                 aria-label="Close modal"
                             >
                                 <XMarkIcon
@@ -138,7 +146,7 @@ onUnmounted(() => {
                         </div>
 
                         <!-- Body -->
-                        <div class="px-6 py-4">
+                        <div class="px-6 pt-2 pb-4">
                             <slot :close="close" />
                         </div>
 

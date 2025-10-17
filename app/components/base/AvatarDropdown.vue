@@ -4,6 +4,7 @@ import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 import { Float } from "@headlessui-float/vue";
 import { useRouter } from "vue-router";
 import { navigationVariants } from "~/variants/NavigationVariants";
+import { popoverVariants } from "~/variants/InputVariants";
 import { emailApiService } from "~/services/EmailApiService";
 // import { dropdownVariants } from "~/variants/DropdownVariant";
 
@@ -92,7 +93,14 @@ const options = [
                     leave-to="opacity-0 scale-95"
                 >
                     <MenuItems
-                        class="w-72 backdrop-blur-xl rounded-2xl py-0.5 px-2 bg-white dark:bg-dark-950 shadow-lg ring-1 ring-black/5 ring-opacity-5 focus:outline-none"
+                        :class="
+                            cn(
+                                popoverVariants({
+                                    popoverVariant: 'primary',
+                                    popoverSize: 'xs',
+                                })
+                            )
+                        "
                     >
                         <!-- Header section with user info -->
                         <div class="flex gap-x-2 pt-4 pb-2 px-3">

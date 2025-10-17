@@ -36,6 +36,22 @@ const handleHelpSubmitted = (data: any) => {};
             <Button @click="showHelpkModal = true" variant="icon" size="icon">
                 <LifebuoyIcon class="w-5" />
             </Button>
+            <Popover>
+                <template #button>Teste</template>
+
+                <div>
+                    <ul>
+                        <li>Line 1</li>
+                        <li>Line 1</li>
+                        <li>Line 1</li>
+                        <li>Line 1</li>
+                        <li>Line 1</li>
+                        <li>Line 1</li>
+                        <li>Line 1</li>
+                        <li>Line 1</li>
+                    </ul>
+                </div>
+            </Popover>
         </template>
     </Aside>
 

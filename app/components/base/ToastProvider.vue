@@ -44,7 +44,7 @@ const positionClasses = {
                 :class="toast.position ? positionClasses[toast.position] : ''"
                 @click="removeToast(toast.id)"
             >
-                <div
+                <Panel
                     class="max-w-sm group pointer-events-auto flex gap-x-2 w-full items-center justify-between space-x-2 overflow-hidden p-4 pr-6"
                 >
                     <component
@@ -82,7 +82,7 @@ const positionClasses = {
                     >
                         <XMarkIcon class="size-4" />
                     </button>
-                </div>
+                </Panel>
             </div>
         </TransitionGroup>
     </Teleport>

@@ -27,31 +27,25 @@ export const inputVariants = cva("", {
 });
 
 export const popoverVariants = cva(
-	"absolute bg-red-500 z-50 mt-1 origin-top-right overflow-hidden focus:outline-none flex flex-col gap-y-1 rounded-xl px-2 py-4 shadow border border-slate-50",
+	"backdrop-blur-xl rounded-2xl py-0.5 px-2 shadow-lg focus:outline-none",
 	{
 		variants: {
 			popoverVariant: {
-				primary: "bg-white [&>*]:mt-4 [&>*]:text-2xl",
+				primary: "w-72 bg-white ring-1 ring-black/5 dark:bg-dark-950",
 				secondary: "",
-				contrast: "bg-popover-contrast text-contrastForeground",
+				contrast: "bg-[hsl(0_0%_15%_/_98%)] ring-black/5 dark:bg-dark-950",
 			},
 			popoverSize: {
 				fit: "w-fit max-w-xs",
 				full: "w-full max-w-xs",
-				sm: "",
-				xs: "",
-				icon: "",
-				none: "",
-			},
-			popoverPosition: {
-				left: "left-0",
-				right: "right-0",
+				xs: "w-xs",
+				sm: "w-sm",
+				md: "w-md",
 			},
 		},
 		defaultVariants: {
 			popoverVariant: "primary",
-			popoverSize: "full",
-			popoverPosition: "left",
+			popoverSize: "fit",
 		},
 	}
 );
